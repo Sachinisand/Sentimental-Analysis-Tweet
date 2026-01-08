@@ -46,7 +46,14 @@ This project uses the **Twitter Entity Sentiment Analysis** dataset from Kaggle:
 For this project:
 
 - Only **Positive** and **Negative** labels were used  
-- Neutral and other labels were excluded  
+- Neutral and other labels were excluded 
+- The data files are stored locally as:S 
+
+```text
+data/raw/twitter_training.csv
+data/raw/twitter_validation.csv
+
+```
 
 ## 🧹 Dataset Preparation
 Before training the model, the following steps were applied:
@@ -133,7 +140,7 @@ Open your terminal and run the following commands:
 git clone [https://github.com/Sachinisand/sentimental-analysis-tweet.git](https://github.com/Sachinisand/sentimental-analysis-tweet.git)
 cd sentimental-analysis-tweet
 
-
+```
 2. Create and activate a virtual environment
 python -m venv venv
 venv\Scripts\activate
@@ -154,7 +161,20 @@ jupyter notebook notebooks/01_sentiment_model.ipynb
 ## 📁 Directory Tree
 
 
-sentimental-analysis-tweet/ │── data/ │   └── raw/ │       ├── twitter_training.csv │       └── twitter_validation.csv │── notebooks/ │   └── 01_sentiment_model.ipynb │── models/ │   ├── sentiment_model.pkl │   └── tfidf_vectorizer.pkl │── README.md
+```text
+sentimental-analysis-tweet/
+│── data/
+│   └── raw/
+│       ├── twitter_training.csv
+│       └── twitter_validation.csv
+│── notebooks/
+│   └── 01_sentiment_model.ipynb
+│── models/
+│   ├── sentiment_model.pkl
+│   └── tfidf_vectorizer.pkl
+│── README.md
+
+```
 
 
 
@@ -188,7 +208,6 @@ If you find a bug or want to request a feature, feel free to open an issue in th
 - Dataset: Twitter Entity Sentiment Analysis – Kaggle  
 - Project created by **Sachini Hewahattage**  
   Master’s in Data Analytics | Machine Learning & NLP  
-
 
 
 
