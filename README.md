@@ -130,9 +130,9 @@ pip install pandas numpy scikit-learn matplotlib seaborn joblib
 ##▶️ Run
 
 ### 1. Clone the repository
-```bash
-git clone https://github.com/Sachinisand/sentimental-analysis-tweet.git
-cd sentimental-analysis-tweet
+bash
+-git clone https://github.com/Sachinisand/sentimental-analysis-tweet.git
+-cd sentimental-analysis-tweet
 
 
 2. Create and activate a virtual environment
@@ -151,9 +151,7 @@ jupyter notebook notebooks/01_sentiment_model.ipynb
 
 ---
 
-# ✅ **After the Run section, add the Directory Tree**
 
-```markdown
 ## 📁 Directory Tree
 
 
@@ -161,7 +159,6 @@ sentimental-analysis-tweet/ │── data/ │   └── raw/ │       ├�
 
 
 
-✅ Then add the To‑Do section
 ## 📝 To Do
 - Add more advanced text cleaning (URLs, emojis, mentions, lemmatization)
 - Try other models (SVM, Random Forest, XGBoost)
@@ -170,17 +167,13 @@ sentimental-analysis-tweet/ │── data/ │   └── raw/ │       ├�
 - Add hyperparameter tuning
 
 
-
-✅ Then add Bug / Feature Request
 ## 🐞 Bug / Feature Request
 If you find a bug or want to request a feature, feel free to open an issue in this repository with:
 - What you tried
 - What you expected
 - What actually happened
 
-
 
-✅ Then add Technologies Used
 ## 🧰 Technologies Used
 - Python
 - pandas
@@ -192,7 +185,6 @@ If you find a bug or want to request a feature, feel free to open an issue in th
 
 
 
-✅ Finally add Credits
 ## 🙌 Credits
 - Dataset: Twitter Entity Sentiment Analysis – Kaggle  
 - Project created by **Sachini Hewahattage**  
