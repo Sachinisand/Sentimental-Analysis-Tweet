@@ -128,7 +128,7 @@ I built this project to:
 ```bash
 pip install pandas numpy scikit-learn matplotlib seaborn joblib
 
-## ▶️ Run
+▶️ Run
 
 ### 1. Clone the repository
 ```bash
