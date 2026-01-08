@@ -53,9 +53,8 @@ For this project:
 data/raw/twitter_training.csv
 data/raw/twitter_validation.csv
 
-
-## 🧹 Dataset Preparation
 ---
+## 🧹 Dataset Preparation
 Before training the model, the following steps were applied:
 
 - Loaded the CSV files **without headers** and manually assigned column names:  
