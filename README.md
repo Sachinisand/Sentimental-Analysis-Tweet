@@ -186,12 +186,6 @@ sentimental-analysis-tweet/
 - Add hyperparameter tuning
 
 
-## 🐞 Bug / Feature Request
-If you find a bug or want to request a feature, feel free to open an issue in this repository with:
-- What you tried
-- What you expected
-- What actually happened
-
 
 ## 🧰 Technologies Used
 - Python
