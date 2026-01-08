@@ -49,8 +49,8 @@ For this project:
 - Neutral and other labels were excluded  
 - The data files are stored locally as:
   text
-data/raw/twitter_training.csv
-data/raw/twitter_validation.csv
+-data/raw/twitter_training.csv
+-data/raw/twitter_validation.csv
 
 ## 🧹 Dataset Preparation
 Before training the model, the following steps were applied:
