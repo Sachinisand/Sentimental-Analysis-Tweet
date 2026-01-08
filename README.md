@@ -124,8 +124,7 @@ I built this project to:
 - pip
 
 ### Install the required libraries
-
-bash
+```bash
 pip install pandas numpy scikit-learn matplotlib seaborn joblib
 
 ##▶️ Run
