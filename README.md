@@ -117,22 +117,21 @@ I built this project to:
 - TF‑IDF vectorizer saved as: `models/tfidf_vectorizer.pkl`
 
 ---
+
+
 ## 🛠 Installation
 
 ### Requirements
 - Python 3.8+
 - pip
+- 
+### Steps
 
-### Install the required libraries
+#### 1. Clone the repository
+Open your terminal and run the following commands:
 ```bash
-pip install pandas numpy scikit-learn matplotlib seaborn joblib
-
-##▶️ Run
-
-### 1. Clone the repository
-bash
--git clone https://github.com/Sachinisand/sentimental-analysis-tweet.git
--cd sentimental-analysis-tweet
+git clone [https://github.com/Sachinisand/sentimental-analysis-tweet.git](https://github.com/Sachinisand/sentimental-analysis-tweet.git)
+cd sentimental-analysis-tweet
 
 
 2. Create and activate a virtual environment
