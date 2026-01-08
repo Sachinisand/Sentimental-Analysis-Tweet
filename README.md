@@ -47,7 +47,7 @@ For this project:
 
 - Only **Positive** and **Negative** labels were used  
 - Neutral and other labels were excluded 
-- The data files are stored locally as:S 
+- The data files are stored locally as:
 
 ```text
 data/raw/twitter_training.csv
