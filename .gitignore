@@ -10,6 +10,10 @@ __pycache__/
 # Jupyter
 .ipynb_checkpoints/
 
+# Trained models are not committed; the notebook retrains in seconds
+models/
+*.pkl
+
 # OS / editor
 .DS_Store
 .vscode/

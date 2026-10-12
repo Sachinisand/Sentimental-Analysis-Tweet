@@ -1,210 +1,63 @@
-# 🔍 Twitter Sentiment Analysis
+# Twitter Sentiment Analysis: finding the leak behind an 87 % accuracy
 
-This project performs **sentiment analysis on Twitter text**, classifying tweets as **Positive** or **Negative** using machine learning and NLP techniques.
+**Can a simple model tell positive from negative tweets, and how accurate is it on tweets it has never seen?**
+TF-IDF + logistic regression on 43,013 labelled tweets, with an evaluation that does not cheat.
 
----
+![Accuracy depends on how the data is split](images/leakage_effect.svg)
 
-## 📘 Table of Contents
-- [What is Sentiment Analysis](#what-is-sentiment-analysis)
-- [Dataset](#dataset)
-- [Problem Statement](#problem-statement)
-- [Motivation](#motivation)
-- [Technical Aspects](#technical-aspects)
-- [Installation](#installation)
-- [Run](#run)
-- [Directory Tree](#directory-tree)
-- [To Do](#to-do)
-- [Bug / Feature Request](#bug--feature-request)
-- [Technologies Used](#technologies-used)
-- [Credits](#credits)
+## Key results
 
----
+| | |
+|---|---|
+| **Honest accuracy** | **80.5 %** on tweets the model has never seen (macro F1 0.80; always guessing the majority class: 51 %) |
+| **Leakage found** | Each tweet appears **~6 times as paraphrased copies** under the same ID. A random split tests the model on near-copies of training tweets and reports **86.7 %** |
+| **Validation file** | The dataset's own validation file gives **93.2 %**, but all of its tweet IDs also appear in the training file (59 % with identical text), so it cannot be used to measure real performance |
+| **Shortcut learned** | Brand names (*nba2k*, *eamaddennfl*) are among the strongest "negative" words: the model partly learns which products people complain about, not how they express sentiment |
 
-## 🧠 What is Sentiment Analysis
+## Why this matters
 
-Sentiment analysis (opinion mining) is the process of identifying the emotional tone behind text.  
-It uses **Natural Language Processing (NLP)** and **Machine Learning** to classify text as:
+A model evaluated on near-duplicates of its training data looks better than it is, and the gap only shows up after deployment. Here the fix is simple: split by **tweet ID** (`GroupShuffleSplit`) so that all versions of a tweet are either in training or in testing, never both. The same check applies to any dataset with repeated customers, sessions or devices.
 
-- Positive  
-- Negative  
+| Evaluation | Accuracy | Macro F1 |
+|---|---:|---:|
+| Random split (leaky) | 86.7 % | 0.866 |
+| Validation file (leaky) | 93.2 % | 0.932 |
+| **Grouped by tweet ID (honest)** | **80.5 %** | **0.804** |
+| Always predict the majority class | 51.1 % | – |
 
-In this project, we focus on **binary classification**: Positive vs Negative tweets.
+![Words that push a tweet positive or negative](images/top_words.svg)
 
----
+## Approach
 
-## 📊 Dataset
+1. **Check the data:** 74,682 rows, 12,447 unique tweet IDs (6 rows each), 686 missing texts, 5,190 exact duplicate texts.
+2. **Keep Positive and Negative** tweets (43,013); drop rows with no text instead of filling them with an empty string.
+3. **Model:** TF-IDF (5,000 terms, English stop words removed) + logistic regression in one scikit-learn `Pipeline`.
+4. **Evaluate three ways** (random split, validation file, grouped split) and report the honest one.
+5. **Inspect** the strongest words and misclassified tweets (sarcasm, negation, missing context).
 
-This project uses the **Twitter Entity Sentiment Analysis** dataset from Kaggle:
+## How to run
 
-- **Source:** [Twitter Entity Sentiment Analysis – Kaggle](https://www.kaggle.com/datasets/jp797498e/twitter-entity-sentiment-analysis)
-- The dataset contains tweets labeled with:
-  - `id` – Unique identifier for each tweet  
-  - `topic` – Entity or topic mentioned in the tweet  
-  - `sentiment` – Sentiment label (e.g., Positive, Negative, Neutral, etc.)  
-  - `text` – The tweet content  
-
-For this project:
-
-- Only **Positive** and **Negative** labels were used  
-- Neutral and other labels were excluded 
-- The data files are stored locally as:
-
-```text
-data/raw/twitter_training.csv
-data/raw/twitter_validation.csv
-
-```
-
-## 🧹 Dataset Preparation
-Before training the model, the following steps were applied:
-
-- Loaded the CSV files **without headers** and manually assigned column names:  
-  `['id', 'topic', 'sentiment', 'text']`
-- Filtered rows to keep only **Positive** and **Negative** sentiments
-- Mapped sentiment labels to numeric values:  
-  - Positive → 1  
-  - Negative → 0
-- Replaced missing text values with empty strings
-- Split the data into training and test sets
-
----
-
-## 🎯 Problem Statement
-
-Given the text of a tweet, predict whether its sentiment is:
-
-- **Positive**
-- **Negative**
-
-This is useful for:
-
-- Brand and reputation monitoring  
-- Customer feedback analysis  
-- Social media analytics  
-- Market research  
-
----
-
-## 💡 Motivation
-
-I built this project to:
-
-- Practice **NLP and text classification**
-- Work with a real **Kaggle dataset**
-- Build an **end-to-end ML pipeline** (from raw data to saved model)
-- Create a **portfolio project** that recruiters can review on GitHub
-
----
-
-## ⚙️ Technical Aspects
-
-### **Data Processing**
-- Loaded raw CSV files from `data/raw/`
-- Assigned column names: `id`, `topic`, `sentiment`, `text`
-- Filtered only Positive and Negative labels
-- Created a numeric label column (1 = Positive, 0 = Negative)
-- Handled missing text values with `fillna("")`
-
-### **Feature Engineering**
-- Used **TF‑IDF Vectorizer** with:
-  - `max_features = 5000`
-  - English stopwords removed
-
-### **Model**
-- **Logistic Regression** with:
-  - `max_iter = 1000`
-
-### **Evaluation**
-- Train–test split  
-- Classification report (precision, recall, F1-score, accuracy)  
-- Confusion matrix heatmap using seaborn  
-
-### **Model Saving**
-- Trained model saved as: `models/sentiment_model.pkl`  
-- TF‑IDF vectorizer saved as: `models/tfidf_vectorizer.pkl`
-
----
-
-
-## 🛠 Installation
-
-### Requirements
-- Python 3.8+
-- pip
-- 
-### Steps
-
-#### 1. Clone the repository
-Open your terminal and run the following commands:
 ```bash
-git clone [https://github.com/Sachinisand/sentimental-analysis-tweet.git](https://github.com/Sachinisand/sentimental-analysis-tweet.git)
-cd sentimental-analysis-tweet
-
+pip install -r requirements.txt
+jupyter notebook sentiment_analysis.ipynb
 ```
-2. Create and activate a virtual environment
-python -m venv venv
-venv\Scripts\activate
 
+The notebook runs top to bottom, saves tables to [`results/`](results/) and charts to [`images/`](images/). Trained models are not stored in the repo: training takes a few seconds.
 
-3. Install the required libraries
-pip install pandas numpy scikit-learn matplotlib seaborn joblib
+## Next steps
 
+- Remove entity names from the text, so the model learns sentiment instead of brands.
+- Try character n-grams or a small pre-trained transformer for negation and sarcasm, evaluated with the same grouped split.
 
-4. Run the notebook
-jupyter notebook notebooks/01_sentiment_model.ipynb
+## Limitations
 
+- Dataset labels are noisy, and the tweets cover a fixed set of games and tech brands.
+- A bag-of-words model ignores word order, so sarcasm and negation spread over several words are hard for it.
 
+## Data
+
+[Twitter Entity Sentiment Analysis](https://www.kaggle.com/datasets/jp797498e/twitter-entity-sentiment-analysis) (Kaggle).
 
 ---
 
-
-## 📁 Directory Tree
-
-
-```text
-sentimental-analysis-tweet/
-│── data/
-│   └── raw/
-│       ├── twitter_training.csv
-│       └── twitter_validation.csv
-│── notebooks/
-│   └── 01_sentiment_model.ipynb
-│── models/
-│   ├── sentiment_model.pkl
-│   └── tfidf_vectorizer.pkl
-│── README.md
-
-```
-
-
-
-## 📝 To Do
-- Add more advanced text cleaning (URLs, emojis, mentions, lemmatization)
-- Try other models (SVM, Random Forest, XGBoost)
-- Build a Streamlit app for interactive predictions
-- Deploy the model on a cloud platform (AWS, Azure, Render)
-- Add hyperparameter tuning
-
-
-
-## 🧰 Technologies Used
-- Python
-- pandas
-- numpy
-- scikit‑learn
-- seaborn
-- matplotlib
-- joblib
-
-
-
-## 🙌 Credits
-- Dataset: Twitter Entity Sentiment Analysis – Kaggle  
-- Project created by **Sachini Hewahattage**  
-  Master’s in Data Analytics | Machine Learning & NLP  
-
-
-
-
-
-
+**Author:** Sachini Hewahattage · [LinkedIn](https://www.linkedin.com/in/sachini-hewahattage) · [GitHub](https://github.com/Sachinisand)
