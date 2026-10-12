@@ -1,0 +1,5 @@
+evaluation,accuracy,macro_f1
+Random split (leaky),0.867,0.866
+Validation file (leaky),0.932,0.932
+Grouped by tweet ID (honest),0.805,0.804
+Always predict majority class,0.511,
